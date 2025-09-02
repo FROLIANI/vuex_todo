@@ -11,6 +11,42 @@ export default createStore({
                 {id:4, text:'Build something awesome', done:false}
             ]
         }
+    }, 
+    getters:{
+        doneTodos(state){
+            return state.todos.filter(todo=> todo.done)
+        },
+
+        undoneTodos(state){
+            return state.todos.filter(todo=> !todo.done);
+        }
+    },
+
+    mutations:{
+        addTodo(state, newTodoText){
+            const newId = state.todos.length > 0 ? Math.max(...state.todos.map(todo =>todo.id)) + 1 :1;
+            state.todos.push({
+                id: newId,
+                text: newTodoText,
+                done:false,
+            });
+        },
+        toggleTodo(state, todoId){
+            const todo = state.todos.find(todo =>todo.id ===todoId);
+            if(todo){
+                todo.done = !todo.done;
+            }
+        }
+    },
+
+    actions:{
+        addTodoAsync({commit},newTodoText){
+            setTimeout(()=>{
+                commit('addTodo', newTodoText);
+            },500)
+        }
+
+
     }
 
 })
